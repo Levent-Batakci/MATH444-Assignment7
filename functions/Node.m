@@ -115,6 +115,14 @@ classdef Node < handle
         function c = colRange(node)
             c = node.cmin:node.cmax;
         end
+        
+        function leaves = get_leaves(node)
+            if(numel(node.split_index) == 0)
+                leaves(1) = node;
+            else
+                leaves = [get_leaves(node.left) get_leaves(node.right)];
+            end
+        end
     end
 end
 
