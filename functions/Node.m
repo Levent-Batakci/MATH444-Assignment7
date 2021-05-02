@@ -16,6 +16,8 @@ classdef Node < handle
         rmin
         cmax
         cmin
+        
+        myLeaves
     end
     
     methods
@@ -59,7 +61,11 @@ classdef Node < handle
         end
         
         function e = getErr(node)
-            e = sum(norm(node.vals-node.c, 2));
+            e = sum(vecnorm((node.vals-node.c)', 2));
+        end
+        
+        function e = getMErr(node)
+            e = nnz( (vecnorm((node.vals-node.c)', 2) > 0.05) ) / (numel(node.vals)/3);
         end
         
         function e = splitErr(node, s, dir)
@@ -117,11 +123,32 @@ classdef Node < handle
         end
         
         function leaves = get_leaves(node)
-            if(numel(node.split_index) == 0)
+            if(numel(node.myLeaves) == 0)
+                node = calc_leaves(node);
+            end
+            leaves = node.myLeaves;
+        end
+        
+        function is_leaf = isLeaf(node)
+            is_leaf = (numel(node.split_index) == 0);
+        end
+        
+        function node = prune(node)
+            node.left = [];
+            node.right = [];
+            node.split_index = [];
+            node.split_direction = [];
+            node.myLeaves = get_leaves(node);
+        end
+        
+        function leaves = calc_leaves(node)
+            if(isLeaf(node))
                 leaves(1) = node;
             else
-                leaves = [get_leaves(node.left) get_leaves(node.right)];
+                leaves = [calc_leaves(node.left) calc_leaves(node.right)];
             end
+            
+            node.myLeaves = leaves; %Store them!
         end
     end
 end

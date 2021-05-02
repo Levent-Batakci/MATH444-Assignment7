@@ -34,7 +34,7 @@ while numel(Lmixed) ~= 0
         Leaves{i} = L;
         i=i+1;
     end
-    Nodes{m} = L;
+    Nodes{count} = L;
     
     R = chosen.right;
     count=count+1;

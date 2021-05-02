@@ -6,6 +6,16 @@
 %load Nodes
 load MysteryImage.mat
 load MaximalTree.mat
+disp("Loaded");
+
+%[root, Nodes, Leaves] = MaximalTree(rows, cols, vals, m, n);
+
+%TRY PRUNING!
+% alpha = 0.04;
+% p = 15000;
+% disp("Beginning pruning!");
+% root = PruneTree(root, alpha, p);
+% disp("Pruned!");
 
 %Graph the given
 fullImage =  zeros(m,n,3);
@@ -19,7 +29,6 @@ keyboard;
 clf
 fullImage =  zeros(m,n,3);
 
-disp("Loaded");
 for i = 1:size(Leaves,2)
     leaf = Leaves{i};
     r = rowRange(leaf);
